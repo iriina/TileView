@@ -27,6 +27,7 @@ import com.qozix.tileview.hotspots.HotSpotManager;
 import com.qozix.tileview.markers.CalloutManager;
 import com.qozix.tileview.markers.MarkerEventListener;
 import com.qozix.tileview.markers.MarkerManager;
+import com.qozix.tileview.markers.ScalableMarkerManager;
 import com.qozix.tileview.paths.DrawablePath;
 import com.qozix.tileview.paths.PathHelper;
 import com.qozix.tileview.paths.PathManager;
@@ -78,6 +79,7 @@ public class TileView extends ZoomPanLayout {
 	private SampleManager sampleManager;
 	private TileManager tileManager;
 	private PathManager pathManager;
+	private ScalableMarkerManager scalableMarkerManager;
 	private MarkerManager markerManager;
 	private CalloutManager calloutManager;
 	
@@ -98,7 +100,10 @@ public class TileView extends ZoomPanLayout {
 		
 		pathManager = new PathManager( context, detailManager );
 		addView( pathManager );
-		
+
+		scalableMarkerManager = new ScalableMarkerManager(context, detailManager);
+		addView(scalableMarkerManager);
+
 		markerManager = new MarkerManager( context, detailManager );
 		addView( markerManager );		
 		
@@ -531,6 +536,49 @@ public class TileView extends ZoomPanLayout {
 	 */
 	public void removeMarker( View view ) {
 		markerManager.removeMarker( view );
+	}
+
+	public void setMarkerScaleLimits(double minScale, double maxScale) {
+		scalableMarkerManager.setMarkerScaleLimits(minScale, maxScale);
+	}
+
+	/**
+	 * Add a scalable marker to the the TileView.  The marker can be any View.
+	 * No LayoutParams are required; the View will be laid out using WRAP_CONTENT for both width and height, and positioned based on the parameters
+	 *
+	 * @param view (View) View instance to be added to the TileView
+	 * @param x    (double) relative x position the View instance should be positioned at
+	 * @param y    (double) relative y position the View instance should be positioned at
+	 * @return (View) the View instance added to the TileView
+	 */
+	public View addScalableMarker(View view, double x, double y) {
+		Point point = positionManager.translate(x, y);
+		return scalableMarkerManager.addMarker(view, point.x, point.y);
+	}
+
+	/**
+	 * Add a scalable marker to the the TileView.  The marker can be any View.
+	 * No LayoutParams are required; the View will be laid out using WRAP_CONTENT for both width and height, and positioned based on the parameters
+	 *
+	 * @param view (View) View instance to be added to the TileView
+	 * @param x    (double) relative x position the View instance should be positioned at
+	 * @param y    (double) relative y position the View instance should be positioned at
+	 * @param aX   (float) the x-axis position of a marker will be offset by a number equal to the width of the marker multiplied by this value
+	 * @param aY   (float) the y-axis position of a marker will be offset by a number equal to the height of the marker multiplied by this value
+	 * @return (View) the View instance added to the TileView
+	 */
+	public View addScalableMarker(View view, double x, double y, float anchorX, float anchorY) {
+		Point point = positionManager.translate(x, y);
+		return scalableMarkerManager.addMarker(view, point.x, point.y, anchorX, anchorY);
+	}
+
+	/**
+	 * Removes a scalable marker View from the TileView's view tree.
+	 *
+	 * @param view (View) The marker View to be removed.
+	 */
+	public void removeScalableMarker(View view) {
+		scalableMarkerManager.removeMarker(view);
 	}
 	
 	/**

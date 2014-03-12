@@ -23,7 +23,7 @@ import com.qozix.tileview.detail.DetailManager;
 public class MarkerManager extends TranslationLayout implements DetailLevelEventListener {
 
 	private DetailManager detailManager;
-	private HashMap<View, Rect> markerMap = new HashMap<View, Rect>();
+	HashMap<View, Rect> markerMap = new HashMap<View, Rect>();
 	private ArrayList<MarkerEventListener> listeners = new ArrayList<MarkerEventListener>();
 	
 	public MarkerManager( Context context, DetailManager zm ) {

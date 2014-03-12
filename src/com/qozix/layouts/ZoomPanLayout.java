@@ -161,6 +161,14 @@ public class ZoomPanLayout extends ViewGroup {
 	// PUBLIC API
 	//------------------------------------------------------------------------------------
 
+	public double getMinScale() {
+		return minScale;
+	}
+
+	public double getMaxScale() {
+		return maxScale;
+	}
+
 	/**
 	 * Determines whether the ZoomPanLayout should limit it's minimum scale to no less than what would be required to fill it's container
 	 * @param shouldScaleToFit (boolean) True to limit minimum scale, false to allow arbitrary minimum scale (see {@link setScaleLimits})

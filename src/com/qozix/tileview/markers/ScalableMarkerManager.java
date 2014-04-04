@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.view.View;
 
+import com.nineoldandroids.view.ViewHelper;
 import com.qozix.layouts.ZoomPanLayout;
 import com.qozix.tileview.detail.DetailManager;
 
@@ -29,14 +30,11 @@ public class ScalableMarkerManager extends MarkerManager {
 
 		for (int i = getChildCount() - 1; i >= 0; i--) {
 			View child = getChildAt(i);
-
 			if (child.getVisibility() != GONE) {
 				LayoutParams lp = (LayoutParams) child.getLayoutParams();
 				// get sizes
-				int w, h;
-				w = (int) (child.getMeasuredWidth() * markerScale);
-				h = (int) (child.getMeasuredHeight() * markerScale);
-
+				int w = child.getMeasuredWidth();
+				int h = child.getMeasuredHeight();
 				// get offset position
 				int scaledX = (int) (0.5 + (lp.x * scale));
 				int scaledY = (int) (0.5 + (lp.y * scale));
@@ -51,7 +49,14 @@ public class ScalableMarkerManager extends MarkerManager {
 				if (rect != null) {
 					rect.set(x, y, x + w, y + h);
 				}
+				// layout
 				child.layout(x, y, x + w, y + h);
+				// apply pivots
+				ViewHelper.setPivotX(child, -w * aX);
+				ViewHelper.setPivotY(child, -h * aY);
+				// visually scale
+				ViewHelper.setScaleX(child, (float) markerScale);
+				ViewHelper.setScaleY(child, (float) markerScale);
 			}
 		}
 	}
